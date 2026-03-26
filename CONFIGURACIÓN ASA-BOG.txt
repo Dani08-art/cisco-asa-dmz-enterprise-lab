@@ -1,0 +1,118 @@
+##-- CONFIGURACIÓN ASA-BOG --##
+
+ASA-BOG#show running-config 
+ASA Version 9.6(1)
+!
+hostname ASA-BOG
+enable password XK9CbN4MkQEI0jdt encrypted
+names
+!
+interface GigabitEthernet1/1
+ nameif inside
+ security-level 100
+ ip address 10.0.0.1 255.255.255.252
+!
+interface GigabitEthernet1/2
+ nameif dmz
+ security-level 50
+ ip address 172.16.1.1 255.255.255.0
+!
+interface GigabitEthernet1/3
+ nameif outside
+ security-level 0
+ ip address 200.0.0.2 255.255.255.252
+!
+interface GigabitEthernet1/4
+ no nameif
+ no security-level
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/5
+ no nameif
+ no security-level
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/6
+ no nameif
+ no security-level
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/7
+ no nameif
+ no security-level
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/8
+ no nameif
+ no security-level
+ no ip address
+ shutdown
+!
+interface Management1/1
+ management-only
+ no nameif
+ no security-level
+ no ip address
+ shutdown
+!
+object network INSIDE-NETS
+ subnet 192.168.0.0 255.255.0.0
+ nat (inside,outside) dynamic interface
+object network WEB-SERVER
+ host 172.16.1.11
+ nat (dmz,outside) static 200.0.0.3
+!
+route outside 0.0.0.0 0.0.0.0 200.0.0.1 1
+route inside 192.168.0.0 255.255.0.0 10.0.0.2 1
+!
+access-list INSIDE-POLICY extended deny ip 192.168.50.0 255.255.255.0 any
+access-list INSIDE-POLICY extended permit icmp any any
+access-list INSIDE-POLICY extended permit ip 192.168.0.0 255.255.0.0 any
+access-list INSIDE-POLICY extended permit ip 10.0.0.0 255.255.255.252 172.16.1.0 255.255.255.0
+access-list INSIDE-POLICY extended permit udp 192.168.0.0 255.255.0.0 host 172.16.1.10 eq domain
+access-list INSIDE-POLICY extended permit tcp 192.168.0.0 255.255.0.0 host 172.16.1.10 eq domain
+access-list INSIDE-POLICY extended permit tcp 192.168.0.0 255.255.0.0 host 172.16.1.11 eq www
+access-list OUTSIDE-POLICY extended permit icmp any any
+access-list OUTSIDE-POLICY extended permit tcp any host 200.0.0.3 eq domain
+access-list OUTSIDE-POLICY extended permit udp any host 200.0.0.3 eq domain
+access-list OUTSIDE-POLICY extended permit tcp any host 200.0.0.4 eq smtp
+access-list DMZ-POLICY extended permit icmp any any
+access-list DMZ-POLICY extended permit tcp any host 172.16.1.10 eq domain
+access-list DMZ-POLICY extended permit udp any host 172.16.1.10 eq domain
+access-list DMZ-POLICY extended permit tcp any host 172.16.1.11 eq www
+!
+!
+access-group INSIDE-POLICY in interface inside
+access-group OUTSIDE-POLICY in interface outside
+access-group DMZ-POLICY in interface dmz
+aaa authentication ssh console LOCAL
+!
+username admin password XK9CbN4MkQEI0jdt encrypted
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map
+  inspect ftp 
+  inspect http 
+  inspect icmp 
+!
+service-policy global_policy global
+!
+telnet timeout 5
+ssh 192.168.21.0 255.255.255.0 inside
+ssh timeout 5
+!
+!
+!
+!
+ASA-BOG# 
