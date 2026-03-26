@@ -214,16 +214,6 @@ Este laboratorio me ayudó a entender mejor:
 
 ---
 
-## Próximos pasos
-
-- Corregir la publicación del servidor WEB
-- Validar acceso por dominio de extremo a extremo
-- Agregar más pruebas de troubleshooting
-- Documentar configuraciones por equipo
-- Migrar el mismo escenario a un laboratorio más avanzado en GNS3 o CML a futuro
-
----
-
 ## Autor
 
 Laboratorio realizado como práctica personal para fortalecer conocimientos en:
