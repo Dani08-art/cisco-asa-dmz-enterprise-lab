@@ -14,9 +14,6 @@ Topología del laboratorio:
 
 ![Topología del laboratorio](sandbox:/mnt/data/30bec70b-3cc8-4de5-8779-f24bd5b6181a.png)
 
-También puedes verla directamente aquí:  
-[Ver topología](sandbox:/mnt/data/30bec70b-3cc8-4de5-8779-f24bd5b6181a.png)
-
 ---
 
 ## Objetivos del laboratorio
