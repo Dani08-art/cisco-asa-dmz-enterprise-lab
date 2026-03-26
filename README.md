@@ -48,7 +48,7 @@ También puedes verla directamente aquí:
 ### Core
 - **Core-SW-BOG**
   - SVIs
-  - `ip routing`
+  - IP Routing
   - STP
   - DHCP relay
 
